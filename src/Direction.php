@@ -2,7 +2,7 @@
 
 class Direction
 {
-    private $DIRECTIONS = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
+    const DIRECTIONS = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
     private $directionIndex;
 
     /***
@@ -12,7 +12,12 @@ class Direction
      */
     public function valueOf($directionNum)
     {
-        return $this->DIRECTIONS[$directionNum];
+        return self::DIRECTIONS[$directionNum];
+    }
+
+    public function getDirections()
+    {
+        return self::DIRECTIONS;
     }
 
     /***
@@ -43,8 +48,8 @@ class Direction
     private function rotate($step)
     {
         $newIndex = ($this->directionIndex + $step) < 0 ?
-            count($this->DIRECTIONS) - 1 :
-            ($this->directionIndex + $step) % count($this->DIRECTIONS);
+            count(self::DIRECTIONS) - 1 :
+            ($this->directionIndex + $step) % count(self::DIRECTIONS);
 
         return $this->valueOf($newIndex);
     }
