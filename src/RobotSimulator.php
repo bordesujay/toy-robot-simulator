@@ -63,23 +63,15 @@ class RobotSimulator
     {
         $args = explode(" ", $inputString);
         $command = $args[0];
-        $x = 0;
-        $y = 0;
-        $direction = null;
-
-        if ($command == Command::PLACE)
-        {
-            $placeParams = explode(",", substr($inputString, strpos($inputString, Command::PLACE) + 5));
-            $x = (int)$placeParams[0];
-            $y = (int)$placeParams[1];
-            $direction = new Direction($placeParams[2]);
-        }
-
         $output = null;
 
         switch ($command)
         {
             case Command::PLACE:
+                $placeParams = explode(",", substr($inputString, strpos($inputString, Command::PLACE) + 5));
+                $x = (int)$placeParams[0];
+                $y = (int)$placeParams[1];
+                $direction = new Direction($placeParams[2]);
                 $this->placeToyRobot(new Position($x, $y, $direction));
                 break;
             case Command::MOVE:
