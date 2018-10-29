@@ -2,6 +2,7 @@
 
 require_once('Robot.php');
 require_once('Table.php');
+require_once('Command.php');
 
 class RobotSimulator
 {
@@ -23,7 +24,6 @@ class RobotSimulator
      * Places the robot on the squareBoard  in position X,Y and facing NORTH, SOUTH, EAST or WEST
      * @param Position $position
      * @return bool - true if placed successfully
-     * @throws Exception
      */
     public function placeToyRobot(Position $position)
     {
@@ -57,5 +57,50 @@ class RobotSimulator
         $position = $this->robot->getPosition();
         $direction = $position->getDirection();
         return $position->getX() . "," . $position->getY() . "," . $direction->getDirectionValue();
+    }
+
+    public function execute($inputString)
+    {
+        $args = explode(" ", $inputString);
+        $command = $args[0];
+        $x = 0;
+        $y = 0;
+        $direction = null;
+
+        if ($command == Command::PLACE)
+        {
+            $placeParams = explode(",", substr($inputString, strpos($inputString, Command::PLACE) + 5));
+            $x = (int)$placeParams[0];
+            $y = (int)$placeParams[1];
+            $direction = new Direction($placeParams[2]);
+        }
+
+        $output = null;
+
+        switch ($command)
+        {
+            case Command::PLACE:
+                $this->placeToyRobot(new Position($x, $y, $direction));
+                break;
+            case Command::MOVE:
+                $position = $this->robot->getPosition();
+                $newPosition = $position->getNextPosition();
+                if ($this->table->isValidPosition($newPosition))
+                    $this->robot->move($newPosition);
+                break;
+            case Command::LEFT:
+                $this->robot->rotateLeft();
+                break;
+            case Command::RIGHT:
+                $this->robot->rotateRight();
+                break;
+            case 'REPORT':
+                $output = $this->report();
+                break;
+            default:
+                break;
+        }
+
+        return $output;
     }
 }

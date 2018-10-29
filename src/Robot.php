@@ -7,7 +7,7 @@ class Robot
 
     private $position;
 
-    public function __construct(Position $position)
+    public function __construct(Position $position = null)
     {
         $this->position = $position;
     }
@@ -41,8 +41,7 @@ class Robot
             // change position
             $this->position = $newPosition;
             return true;
-        }
-        else
+        } else
         {
             return $this->move($this->position->getNextPosition());
         }
