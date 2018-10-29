@@ -5,6 +5,11 @@ class Direction
     const DIRECTIONS = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
     private $directionIndex;
 
+    public function __construct($directionValue)
+    {
+        $this->directionIndex =  $this->indexOf($directionValue);
+    }
+
     /***
      * Function to get the value of direction from index
      * @param $directionNum
@@ -15,18 +20,28 @@ class Direction
         return self::DIRECTIONS[$directionNum];
     }
 
-    public function getDirections()
+    public function indexOf($directionValue)
     {
-        return self::DIRECTIONS;
+        return array_search($directionValue, self::DIRECTIONS);
+    }
+
+    public function getDirectionIndex()
+    {
+        return $this->directionIndex;
+    }
+
+    public function getDirectionValue()
+    {
+        return self::DIRECTIONS[$this->directionIndex];
     }
 
     /***
      * function to set direction index
-     * @param $direction
+     * @param $directionNumber
      */
-    public function setDirection($direction)
+    public function setDirectionIndex($directionNumber)
     {
-        $this->directionIndex = $direction;
+        $this->directionIndex = $directionNumber;
     }
 
     /**
@@ -50,6 +65,8 @@ class Direction
         $newIndex = ($this->directionIndex + $step) < 0 ?
             count(self::DIRECTIONS) - 1 :
             ($this->directionIndex + $step) % count(self::DIRECTIONS);
+
+        $this->setDirectionIndex($newIndex);
 
         return $this->valueOf($newIndex);
     }

@@ -73,7 +73,8 @@ class Position
     }
 
     /***
-     * Function to get the next position depending on the location
+     * * Function to get the next position depending on the location
+     * @param int $steps
      * @return Position
      */
     public function getNextPosition($steps = 1)
@@ -84,7 +85,7 @@ class Position
         // new position to validate
         $newPosition = new Position($this);
 
-        switch ($this->direction)
+        switch ($this->direction->getDirectionValue())
         {
             case 'NORTH':
                 $newPosition->changePosition(0, $steps);

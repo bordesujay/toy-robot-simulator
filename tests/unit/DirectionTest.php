@@ -4,11 +4,10 @@ require_once 'src/Direction.php';
 
 class DirectionTest extends \Codeception\Test\Unit
 {
-    protected $direction;
 
     protected function _before()
     {
-        $this->direction = new Direction();
+
     }
 
     protected function _after()
@@ -20,13 +19,13 @@ class DirectionTest extends \Codeception\Test\Unit
      */
     public function testShouldRotateFromNorthToWestWhenTurnedLeft()
     {
-        $this->direction->setDirection(0);
-        $this->assertEquals('WEST', $this->direction->leftDirection());
+        $direction = new Direction('NORTH');
+        $this->assertEquals('WEST', $direction->leftDirection());
     }
 
     public function testShouldRotateFromNorthToEastWhenTurnedRight()
     {
-        $this->direction->setDirection(0);
-        $this->assertEquals('EAST', $this->direction->rightDirection());
+        $direction = new Direction('NORTH');
+        $this->assertEquals('EAST', $direction->rightDirection());
     }
 }
