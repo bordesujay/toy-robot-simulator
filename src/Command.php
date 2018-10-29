@@ -3,7 +3,7 @@
 /***
  * Class Command - acts as enum
  */
-class Command extends SplEnum
+abstract class Command
 {
      const PLACE = 'PLACE';
      const MOVE = 'MOVE';

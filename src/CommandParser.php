@@ -8,6 +8,7 @@ class CommandParser
         Command::RIGHT => '/^RIGHT$/',
         Command::MOVE => '/^MOVE$/',
         Command::REPORT => '/^REPORT$/',
+        Command::PLACE => '/^PLACE [0-9]+, [0-9]+, (?:NORTH|EAST|SOUTH|WEST)$/',
     );
     private $commandsArray = null;
 
@@ -18,8 +19,7 @@ class CommandParser
         {
             // Breaking the lines by new line character and pushing each line into array
             $this->commandsArray = preg_split("/\R/", file_get_contents($filename));
-        }
-        else
+        } else
         {
             print("Error: could not open/read file: " . $filename);
             return;
@@ -97,8 +97,7 @@ class CommandParser
         if ($result == 1)
         {
             return true;
-        }
-        else
+        } else
         {
             return false;
         }
@@ -143,25 +142,22 @@ class CommandParser
     {
         $placeCommandArray = explode(" ", $currentLine);
 
-        if ($placeCommandArray[0] != Command::PLACE)
+        if (trim($placeCommandArray[0]) != Command::PLACE)
         {
             return false;
         }
 
-        $placeCommandParams = explode(",", $placeCommandArray[1]);
+        $placeArray = explode(",", substr($currentLine, strpos($currentLine, Command::PLACE) + 5));
 
-        foreach ($placeCommandParams as &$value)
+        foreach ($placeArray as &$value)
         {
             $value = trim($value);
         }
 
-        $trimmedString = implode(", ", $placeCommandArray);
-
+        $trimmedString = implode(", ", $placeArray);
         $currentLine = Command::PLACE . " " . $trimmedString;
 
-        $pattern = '/^PLACE [0-9]+, [0-9]+, (?:NORTH|EAST|SOUTH|WEST)$/';
-
-        return $this->evaluatePattern($pattern, $currentLine);
+        return $this->evaluatePattern(CommandParser::pattern[Command::PLACE], $currentLine);
     }
 
     /***
