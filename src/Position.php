@@ -83,7 +83,6 @@ class Position
         if ($this->getX() === null || $this->getY() === null || $this->getDirection() === null)
             return null;
 
-        // new position to validate
         $newPosition = new Position($this);
 
         switch ($this->direction->getDirectionValue())
