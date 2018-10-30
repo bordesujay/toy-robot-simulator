@@ -7,7 +7,7 @@ require_once ('src/CommandParser.php');
 $commandParser = new CommandParser($argv[1]);
 $commandList = $commandParser->getCommands();
 
-$table = new Table(4, 4);
+$table = new Table(5, 5);
 $robot = new Robot(null);
 $simulator = new RobotSimulator($table, $robot);
 
