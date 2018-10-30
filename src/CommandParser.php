@@ -3,7 +3,7 @@ require_once('Command.php');
 
 class CommandParser
 {
-    const pattern = array(
+    const PATTERN = array(
         Command::LEFT => '/^LEFT$/',
         Command::RIGHT => '/^RIGHT$/',
         Command::MOVE => '/^MOVE$/',
@@ -12,22 +12,24 @@ class CommandParser
     );
     private $commandsArray = null;
 
-    public function __construct($filename)
+    public function __construct($filename = null)
     {
-        // check if file is valid and readable
-        if (is_file($filename) && is_readable($filename))
+        if(isset($filename))
         {
-            // Breaking the lines by new line character and pushing each line into array
-            $this->commandsArray = preg_split("/\R/", file_get_contents($filename));
-        } else
-        {
-            print("Error: could not open/read file: " . $filename);
-            return;
+            // check if file is valid and readable
+            if (is_file($filename) && is_readable($filename))
+            {
+                // Breaking the lines by new line character and pushing each line into array
+                $this->commandsArray = preg_split("/\R/", file_get_contents($filename));
+            } else
+            {
+                print("Error: could not open/read file: " . $filename);
+                return;
+            }
+
+            //  Find the invalid commands and remove them
+            $this->removeInvalidCommands($this->findInvalidCommands());
         }
-
-        //  Find the invalid commands and remove them
-        $this->removeInvalidCommands($this->findInvalidCommands());
-
     }
 
     /***
@@ -81,7 +83,7 @@ class CommandParser
      */
     private function isMoveCommand($currentLine)
     {
-        return $this->evaluatePattern(CommandParser::pattern[Command::MOVE], $currentLine);
+        return $this->evaluatePattern(CommandParser::PATTERN[Command::MOVE], $currentLine);
     }
 
     /***
@@ -110,7 +112,7 @@ class CommandParser
      */
     private function isLeftCommand($currentLine)
     {
-        return $this->evaluatePattern(CommandParser::pattern[Command::LEFT], $currentLine);
+        return $this->evaluatePattern(CommandParser::PATTERN[Command::LEFT], $currentLine);
     }
 
     /***
@@ -120,7 +122,7 @@ class CommandParser
      */
     private function isRightCommand($currentLine)
     {
-        return $this->evaluatePattern(CommandParser::pattern[Command::RIGHT], $currentLine);
+        return $this->evaluatePattern(CommandParser::PATTERN[Command::RIGHT], $currentLine);
     }
 
     /***
@@ -130,7 +132,7 @@ class CommandParser
      */
     private function isReportCommand($currentLine)
     {
-        return $this->evaluatePattern(CommandParser::pattern[Command::REPORT], $currentLine);
+        return $this->evaluatePattern(CommandParser::PATTERN[Command::REPORT], $currentLine);
     }
 
     /***
@@ -147,17 +149,28 @@ class CommandParser
             return false;
         }
 
-        $placeArray = explode(",", substr($currentLine, strpos($currentLine, Command::PLACE) + 5));
-
-        foreach ($placeArray as &$value)
-        {
-            $value = trim($value);
-        }
-
-        $trimmedString = implode(", ", $placeArray);
+        $placeCommandParams = $this->createPlaceCommandParams($currentLine);
+        $trimmedString = implode(", ", $placeCommandParams);
         $currentLine = Command::PLACE . " " . $trimmedString;
 
-        return $this->evaluatePattern(CommandParser::pattern[Command::PLACE], $currentLine);
+        return $this->evaluatePattern(CommandParser::PATTERN[Command::PLACE], $currentLine);
+    }
+
+    /***
+     * Create place command params array from the command string
+     * @param $currentLine
+     * @return array
+     */
+    public function createPlaceCommandParams(&$currentLine)
+    {
+        $placeCommandParams = explode(",", substr($currentLine, strpos($currentLine, Command::PLACE) + 5));
+        foreach ($placeCommandParams as &$value)
+        {
+            $value = trim($value);
+            $value = is_numeric($value) ? (int)$value : $value;
+        }
+
+        return $placeCommandParams;
     }
 
     /***

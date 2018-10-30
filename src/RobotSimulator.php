@@ -3,6 +3,7 @@
 require_once('Robot.php');
 require_once('Table.php');
 require_once('Command.php');
+require_once('CommandParser.php');
 
 class RobotSimulator
 {
@@ -25,7 +26,7 @@ class RobotSimulator
      * @param Position $position
      * @return bool - true if placed successfully
      */
-    public function placeToyRobot(Position $position)
+    public function placeRobot(Position $position)
     {
 
         if ($this->table == null)
@@ -68,11 +69,12 @@ class RobotSimulator
         switch ($command)
         {
             case Command::PLACE:
-                $placeParams = explode(",", substr($inputString, strpos($inputString, Command::PLACE) + 5));
-                $x = (int)$placeParams[0];
-                $y = (int)$placeParams[1];
+                $command = new CommandParser();
+                $placeParams = $command->createPlaceCommandParams($inputString);
+                $x = $placeParams[0];
+                $y = $placeParams[1];
                 $direction = new Direction($placeParams[2]);
-                $this->placeToyRobot(new Position($x, $y, $direction));
+                $this->placeRobot(new Position($x, $y, $direction));
                 break;
             case Command::MOVE:
                 $this->robot->move();
