@@ -5,7 +5,7 @@ require_once('Position.php');
 class Robot
 {
 
-    private $position;
+    private $position = null;
 
     public function __construct(Position $position = null)
     {
@@ -21,31 +21,26 @@ class Robot
         return true;
     }
 
-    /**
+    /***
      * Moves the robot one unit forward in the direction it is currently facing
-     *
-     * @return true if moved successfully
+     * @param Position|null $newPosition
+     * @return bool - true if moved successfully
      */
-    public function move()
+    public function move(Position $newPosition = null)
     {
-        //  Since PHP does not support constructor overloading func_num_args had to be used
-        $arguments = func_num_args(); // get variable number of arguments
-        if ($arguments == 1)
+        //  if current position of robot is not set then it will not move
+        if($this->position == null)
         {
-            $newPosition = func_get_arg(0);
-            if ($newPosition == null)
-            {
-                return false;
-            }
-
-            // change position
-            $this->position = $newPosition;
-            return true;
-        } else
-        {
-            return $this->move($this->position->getNextPosition());
+            return false;
         }
 
+        if($newPosition == null)
+        {
+            $this->move($this->position->getNextPosition());
+        }
+
+        $this->position = $newPosition;
+        return true;
     }
 
     public function getPosition()
@@ -60,6 +55,12 @@ class Robot
      */
     public function rotateLeft()
     {
+        //  if current position of robot is not set then it will not rotate
+        if($this->position == null)
+        {
+            return false;
+        }
+
         if ($this->position->getDirection() == null)
         {
             return false;
@@ -79,6 +80,12 @@ class Robot
      */
     public function rotateRight()
     {
+        //  if current position of robot is not set then it will not rotate
+        if($this->position == null)
+        {
+            return false;
+        }
+
         if ($this->position->getDirection() == null)
         {
             return false;

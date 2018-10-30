@@ -4,7 +4,6 @@ require_once ('src/Robot.php');
 require_once ('src/RobotSimulator.php');
 require_once ('src/CommandParser.php');
 
-
 $commandParser = new CommandParser($argv[1]);
 $commandList = $commandParser->getCommands();
 

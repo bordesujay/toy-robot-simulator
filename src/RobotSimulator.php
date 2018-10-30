@@ -75,10 +75,7 @@ class RobotSimulator
                 $this->placeToyRobot(new Position($x, $y, $direction));
                 break;
             case Command::MOVE:
-                $position = $this->robot->getPosition();
-                $newPosition = $position->getNextPosition();
-                if ($this->table->isValidPosition($newPosition))
-                    $this->robot->move($newPosition);
+                $this->robot->move();
                 break;
             case Command::LEFT:
                 $this->robot->rotateLeft();
@@ -86,7 +83,7 @@ class RobotSimulator
             case Command::RIGHT:
                 $this->robot->rotateRight();
                 break;
-            case 'REPORT':
+            case Command::REPORT:
                 $output = $this->report();
                 break;
             default:
