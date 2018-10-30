@@ -4,7 +4,7 @@ require_once('Robot.php');
 require_once('Table.php');
 require_once('Command.php');
 require_once('CommandParser.php');
-require_once ('RobotException.php');
+require_once('RobotException.php');
 
 class RobotSimulator
 {
