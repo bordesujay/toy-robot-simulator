@@ -80,8 +80,8 @@ class Position
      */
     public function getNextPosition($steps = 1)
     {
-        if ($this->getX() == null || $this->getY() || $this->getDirection())
-           return null;
+        if ($this->getX() == null || $this->getY() == null || $this->getDirection() == null)
+            return null;
 
         // new position to validate
         $newPosition = new Position($this);
