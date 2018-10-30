@@ -8,7 +8,7 @@ class CommandParser
         Command::RIGHT => '/^RIGHT$/',
         Command::MOVE => '/^MOVE$/',
         Command::REPORT => '/^REPORT$/',
-        Command::PLACE => '/^PLACE [0-9]+, [0-9]+, (?:NORTH|EAST|SOUTH|WEST)$/',
+        Command::PLACE => '/^PLACE [0-9]+,[0-9]+,(?:NORTH|EAST|SOUTH|WEST)$/',
     );
     private $commandsArray = null;
 
@@ -150,7 +150,7 @@ class CommandParser
         }
 
         $placeCommandParams = $this->createPlaceCommandParams($currentLine);
-        $trimmedString = implode(", ", $placeCommandParams);
+        $trimmedString = implode(",", $placeCommandParams);
         $currentLine = Command::PLACE . " " . $trimmedString;
 
         return $this->evaluatePattern(CommandParser::PATTERN[Command::PLACE], $currentLine);

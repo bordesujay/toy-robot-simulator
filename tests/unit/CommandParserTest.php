@@ -29,7 +29,7 @@ class CommandParserTest extends \Codeception\Test\Unit
 
         //assert "PLACE" command with exact spacing/position and case.
         $commandParser = new CommandParser('testfiles/Codeception_unit_test_files/place-command-file');
-        $this->assertEquals(['PLACE 0, 0, SOUTH'], $commandParser->getCommands());
+        $this->assertEquals(['PLACE 0,0,SOUTH'], $commandParser->getCommands());
 
         //assert move
         $commandParser = new CommandParser('testfiles/Codeception_unit_test_files/move-command-file');
@@ -42,7 +42,7 @@ class CommandParserTest extends \Codeception\Test\Unit
             'LEFT',
             'RIGHT',
             'REPORT',
-            'PLACE 0, 0, NORTH'
+            'PLACE 0,0,NORTH'
         ], $commandParser->getCommands());
 
         //file with errors
@@ -59,7 +59,7 @@ class CommandParserTest extends \Codeception\Test\Unit
         */
         $commandParser = new CommandParser('testfiles/Codeception_unit_test_files/bad-commands');
         $this->assertEquals([
-            'PLACE 0, 0, SOUTH',
+            'PLACE 0,0,SOUTH',
             'RIGHT',
             'MOVE',
             'LEFT',

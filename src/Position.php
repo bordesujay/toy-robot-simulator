@@ -1,6 +1,7 @@
 <?php
 
-require_once 'Direction.php';
+require_once ('RobotException.php');
+require_once ('Direction.php');
 
 class Position
 {
@@ -79,8 +80,8 @@ class Position
      */
     public function getNextPosition($steps = 1)
     {
-        if ($this->direction == null)
-            new Exception("Invalid robot direction");
+        if ($this->getX() == null || $this->getY() || $this->getDirection())
+           return null;
 
         // new position to validate
         $newPosition = new Position($this);

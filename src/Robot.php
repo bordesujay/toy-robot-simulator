@@ -36,10 +36,10 @@ class Robot
 
         if($newPosition == null)
         {
-            $this->move($this->position->getNextPosition());
+            $newPosition = $this->position->getNextPosition();
         }
 
-        $this->position = $newPosition;
+        $this->setPosition($newPosition);
         return true;
     }
 

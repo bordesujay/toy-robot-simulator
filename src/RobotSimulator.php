@@ -4,6 +4,7 @@ require_once('Robot.php');
 require_once('Table.php');
 require_once('Command.php');
 require_once('CommandParser.php');
+require_once ('RobotException.php');
 
 class RobotSimulator
 {
@@ -19,6 +20,52 @@ class RobotSimulator
     {
         $this->table = $table;
         $this->robot = $robot;
+    }
+
+    public function execute($inputString)
+    {
+        $args = explode(" ", $inputString);
+        $command = $args[0];
+        $output = null;
+
+        switch ($command)
+        {
+            case Command::PLACE:
+                $command = new CommandParser();
+                $placeParams = $command->createPlaceCommandParams($inputString);
+                $x = $placeParams[0];
+                $y = $placeParams[1];
+                $direction = new Direction($placeParams[2]);
+                $this->placeRobot(new Position($x, $y, $direction));
+                break;
+
+            case Command::MOVE:
+                if ($this->robot->getPosition() == null)
+                    break;
+
+                $currentPos = $this->robot->getPosition();
+                $newPos = $currentPos->getNextPosition();
+                if ($this->table->isValidPosition($newPos))
+                    $this->robot->move();
+                break;
+
+            case Command::LEFT:
+                $this->robot->rotateLeft();
+                break;
+
+            case Command::RIGHT:
+                $this->robot->rotateRight();
+                break;
+
+            case Command::REPORT:
+                $output = $this->report();
+                break;
+
+            default:
+                break;
+        }
+
+        return $output;
     }
 
     /***
@@ -57,41 +104,7 @@ class RobotSimulator
 
         $position = $this->robot->getPosition();
         $direction = $position->getDirection();
-        return $position->getX() . "," . $position->getY() . "," . $direction->getDirectionValue();
-    }
-
-    public function execute($inputString)
-    {
-        $args = explode(" ", $inputString);
-        $command = $args[0];
-        $output = null;
-
-        switch ($command)
-        {
-            case Command::PLACE:
-                $command = new CommandParser();
-                $placeParams = $command->createPlaceCommandParams($inputString);
-                $x = $placeParams[0];
-                $y = $placeParams[1];
-                $direction = new Direction($placeParams[2]);
-                $this->placeRobot(new Position($x, $y, $direction));
-                break;
-            case Command::MOVE:
-                $this->robot->move();
-                break;
-            case Command::LEFT:
-                $this->robot->rotateLeft();
-                break;
-            case Command::RIGHT:
-                $this->robot->rotateRight();
-                break;
-            case Command::REPORT:
-                $output = $this->report();
-                break;
-            default:
-                break;
-        }
-
-        return $output;
+        $delimiter = ",";
+        return $position->getX() . $delimiter . $position->getY() . $delimiter . $direction->getDirectionValue();
     }
 }
